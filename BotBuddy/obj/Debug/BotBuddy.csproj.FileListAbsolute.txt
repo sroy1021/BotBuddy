@@ -1,0 +1,5 @@
+c:\users\user\documents\visual studio 2015\Projects\BotBuddy\BotBuddy\bin\Debug\BotBuddy.dll
+c:\users\user\documents\visual studio 2015\Projects\BotBuddy\BotBuddy\bin\Debug\BotBuddy.pdb
+c:\users\user\documents\visual studio 2015\Projects\BotBuddy\BotBuddy\obj\Debug\BotBuddy.dll
+c:\users\user\documents\visual studio 2015\Projects\BotBuddy\BotBuddy\obj\Debug\BotBuddy.pdb
+c:\users\user\documents\visual studio 2015\Projects\BotBuddy\BotBuddy\obj\Debug\BotBuddy.csprojResolveAssemblyReference.cache

@@ -1,0 +1,11 @@
+c:\Users\USER\documents\visual studio 2015\Projects\BotBuddy\TestHarness\bin\Debug\TestHarness.exe.config
+c:\Users\USER\documents\visual studio 2015\Projects\BotBuddy\TestHarness\bin\Debug\TestHarness.exe
+c:\Users\USER\documents\visual studio 2015\Projects\BotBuddy\TestHarness\bin\Debug\TestHarness.pdb
+c:\Users\USER\documents\visual studio 2015\Projects\BotBuddy\TestHarness\bin\Debug\BotBuddy.dll
+c:\Users\USER\documents\visual studio 2015\Projects\BotBuddy\TestHarness\bin\Debug\BotBuddy.pdb
+c:\Users\USER\documents\visual studio 2015\Projects\BotBuddy\TestHarness\obj\Debug\TestHarness.csprojResolveAssemblyReference.cache
+c:\Users\USER\documents\visual studio 2015\Projects\BotBuddy\TestHarness\obj\Debug\TestHarness.Form1.resources
+c:\Users\USER\documents\visual studio 2015\Projects\BotBuddy\TestHarness\obj\Debug\TestHarness.Properties.Resources.resources
+c:\Users\USER\documents\visual studio 2015\Projects\BotBuddy\TestHarness\obj\Debug\TestHarness.csproj.GenerateResource.Cache
+c:\Users\USER\documents\visual studio 2015\Projects\BotBuddy\TestHarness\obj\Debug\TestHarness.exe
+c:\Users\USER\documents\visual studio 2015\Projects\BotBuddy\TestHarness\obj\Debug\TestHarness.pdb
