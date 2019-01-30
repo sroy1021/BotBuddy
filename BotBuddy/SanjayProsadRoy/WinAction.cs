@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Automation;
 using System.Windows.Forms;
+using static BotBuddy.SanjayProsadRoy.Win32;
+
 
 namespace BotBuddy.SanjayProsadRoy
 {
@@ -30,6 +32,9 @@ namespace BotBuddy.SanjayProsadRoy
             RESTORE = 9,
             SHOWDEFAULT = 10
         }
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr WindowFromPoint(POINT pt);
 
         [DllImport("user32.dll", SetLastError = true)]
         private static extern IntPtr SetActiveWindow(IntPtr hWnd);
@@ -132,7 +137,8 @@ namespace BotBuddy.SanjayProsadRoy
         [DllImport("user32.dll", SetLastError = true)]
         private static extern IntPtr FindWindowEx(IntPtr parentHandle, IntPtr childAfter, string className, string windowTitle);
 
-
+        [DllImport("user32.dll")]
+        private static extern bool GetCursorPos(out POINT lpPoint);
 
         public IntPtr GetWindow(string windowTitle)
         {
@@ -274,11 +280,52 @@ namespace BotBuddy.SanjayProsadRoy
         {
             var procId = GetWindowProcessId(windowTitle);
             var parentWindow = AutomationElement.RootElement.FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.ProcessIdProperty, procId));
-            var childWindow = parentWindow.FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, classNameOfControl));
+            var childWindow = parentWindow.FindFirst(TreeScope.Descendants, new PropertyCondition(AutomationElement.AutomationIdProperty, classNameOfControl));
 
-            childWindow.SetFocus();
+            //MessageBox.Show(GetValueOfElemnt(childWindow));
+            object patternObj;
 
-            var gridRows = childWindow.FindAll(TreeScope.Children, new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.Custom));
+            // AutomationElement child =   FindChildAt(childWindow, 2);
+
+            //var pattern = childWindow.TryGetCurrentPattern(SelectionPattern.Pattern);
+            //var arrayOfRows = pattern.Current.GetSelection();
+
+            //if ( childWindow.TryGetCurrentPattern(SelectionPattern.Pattern, out patternObj))
+            // {
+
+            // }
+
+            test(childWindow);
+
+
+            var childWindow2 = parentWindow.FindFirst(TreeScope.Descendants, new PropertyCondition(AutomationElement.AutomationIdProperty, "pnlExtraCols"));
+
+            test(childWindow2);
+            //    var arrayOfRows = patternObj.Current.GetSelection();
+            var ch = AutomationElement.RootElement.FindFirst(TreeScope.Descendants, new PropertyCondition(AutomationElement.ClassNameProperty, "WindowsForms10.Window.8.app.0.13965fa_r33_ad139"));
+
+
+            //((InvokePattern)ch.GetCurrentPattern(InvokePattern.Pattern)).Invoke();
+
+
+            var allChild = childWindow.FindAll(TreeScope.Descendants, new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.Text));
+
+            MessageBox.Show(allChild.Count.ToString());
+            foreach (AutomationElement e in allChild)
+            {
+                MessageBox.Show(e.Current.Name);
+
+                if (e.Current.ClassName != "") { MessageBox.Show(e.Current.ClassName);
+
+                    MessageBox.Show(GetValueOfElemnt(e));
+
+                }
+
+               
+            }
+            //childWindow.SetFocus();
+            MessageBox.Show(allChild.Count.ToString());
+            var gridRows = childWindow.FindAll(TreeScope.Children, new PropertyCondition(AutomationElement.IsControlElementProperty, true));
             MessageBox.Show(gridRows.Count.ToString());
 
             foreach (AutomationElement dRow in gridRows)
@@ -286,7 +333,7 @@ namespace BotBuddy.SanjayProsadRoy
                 if (dRow.Current.Name != "Top Row")
                 {
 
-                    object patternObj = null;
+                   // object patternObj = null;
                     string tmpValue = "";
                     if (dRow.TryGetCurrentPattern(ValuePattern.Pattern, out patternObj))
                     {
@@ -317,7 +364,165 @@ namespace BotBuddy.SanjayProsadRoy
 
 
         }
+        private AutomationElement GetControlFromCursorPos()
+        {
+            POINT pt;
+            GetCursorPos(out pt);
+            IntPtr hwnd = WindowFromPoint(pt);
+            AutomationElement el = AutomationElement.FromHandle(hwnd);
+            return el;
 
+        }
+
+        public string GetValueOfList(int index)
+        {
+            AutomationElement element = GetControlFromCursorPos();
+            test(element);
+            return GetItemValueFromCurPosInListView(element, index);
+
+            
+        }
+
+        private string GetItemValueFromCurPosInListView(AutomationElement element, int index)
+        {
+            
+            
+            //int i = 0;
+            object patternObj;
+            string tmpValue = "";
+
+            TreeWalker walker = TreeWalker.ControlViewWalker;
+            AutomationElement child = walker.GetFirstChild(element);
+            for (int x = 1; x <= index; x++)
+            {
+                child = walker.GetNextSibling(child);
+                if (child == null)
+                {
+                    throw new ArgumentOutOfRangeException();
+                }
+            }
+
+
+            if (child.TryGetCurrentPattern(ValuePattern.Pattern, out patternObj))
+            {
+                var valuePattern = (ValuePattern)patternObj;
+                tmpValue = valuePattern.Current.Value;
+                //var pattern = (SelectionPattern)patternObj;
+                //var arrayOfRows = pattern.Current.GetSelection();
+            }
+            else if (child.TryGetCurrentPattern(TextPattern.Pattern, out patternObj))
+            {
+                var textPattern = (TextPattern)patternObj;
+                tmpValue = textPattern.DocumentRange.GetText(-1).TrimEnd('\r'); // often there is an extra '\r' hanging off the end.
+                                                                                //var pattern = (SelectionPattern)patternObj;
+                                                                                //var arrayOfRows = pattern.Current.GetSelection();
+            }
+            else
+            {
+                tmpValue = child.Current.Name;
+
+            }
+
+            return tmpValue;
+
+        }
+
+
+        void test(AutomationElement el)
+        {
+            TreeWalker walker = TreeWalker.ContentViewWalker;
+            int i = 0;
+            object patternObj;
+            string tmpValue = "";
+            for (AutomationElement child = walker.GetFirstChild(el); child != null; child = walker.GetNextSibling(child))
+            {
+
+                if (child.TryGetCurrentPattern(ValuePattern.Pattern, out patternObj))
+                {
+                    var valuePattern = (ValuePattern)patternObj;
+                    tmpValue = valuePattern.Current.Value;
+                    //var pattern = (SelectionPattern)patternObj;
+                    //var arrayOfRows = pattern.Current.GetSelection();
+                }
+                else if (child.TryGetCurrentPattern(TextPattern.Pattern, out patternObj))
+                {
+                    var textPattern = (TextPattern)patternObj;
+                    tmpValue = textPattern.DocumentRange.GetText(-1).TrimEnd('\r'); // often there is an extra '\r' hanging off the end.
+                    //var pattern = (SelectionPattern)patternObj;
+                    //var arrayOfRows = pattern.Current.GetSelection();
+                }
+                else
+                {
+                    tmpValue = child.Current.Name;
+
+                }
+
+                tmpValue = "";
+                //MessageBox.Show(tmpValue);
+                //! Select The Item Here ...
+                //child.SetFocus();
+            }
+        }
+
+
+
+
+        AutomationElement FindChildAt(AutomationElement parent, int index)
+        {
+            if (index < 0)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+            TreeWalker walker = TreeWalker.ControlViewWalker;
+            AutomationElement child = walker.GetFirstChild(parent);
+            for (int x = 1; x <= index; x++)
+            {
+                child = walker.GetNextSibling(child);
+                if (child == null)
+                {
+                    throw new ArgumentOutOfRangeException();
+                }
+            }
+            return child;
+        }
+
+
+        private string GetValueOfElemnt(AutomationElement element)
+        {
+
+            object patternObj = null;
+            string tmpValue = "";
+            
+            if (element.Current.Name != "Top Row")
+            {
+
+                
+                if (element.TryGetCurrentPattern(ValuePattern.Pattern, out patternObj))
+                {
+                    var valuePattern = (ValuePattern)patternObj;
+                    tmpValue = valuePattern.Current.Value;
+                    var pattern = (SelectionPattern)patternObj;
+                    var arrayOfRows = pattern.Current.GetSelection();
+                }
+                else if (element.TryGetCurrentPattern(TextPattern.Pattern, out patternObj))
+                {
+                    var textPattern = (TextPattern)patternObj;
+                    tmpValue = textPattern.DocumentRange.GetText(-1).TrimEnd('\r'); // often there is an extra '\r' hanging off the end.
+                    var pattern = (SelectionPattern)patternObj;
+                    var arrayOfRows = pattern.Current.GetSelection();
+                }
+                else
+                {
+                    tmpValue = element.Current.Name;
+
+                }
+
+                MessageBox.Show(tmpValue);
+
+            }
+
+            return tmpValue;
+        }
 
 //--------------------------------------------------------------------------------------
         private GridPattern GetGridPattern(

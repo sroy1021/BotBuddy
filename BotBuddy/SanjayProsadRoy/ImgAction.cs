@@ -7,14 +7,14 @@ namespace BotBuddy.SanjayProsadRoy
 {
     public class ImgAction
     {
-        private static string ImageFile { get; set; }
+        public string ImageFile { get; set; }
 
-        public ImgAction(string imageFile)
-        {
+        //public ImgAction(string imageFile)
+        //{
 
-            ImageFile = imageFile;
+        //    ImageFile = imageFile;
 
-        }
+        //}
 
         public Point GetImageLocation()
         {
