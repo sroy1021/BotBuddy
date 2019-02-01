@@ -12,6 +12,7 @@ using System.Windows;
 
 
 
+
 namespace TestHarness
 {
     public partial class Form1 : Form
@@ -24,18 +25,31 @@ namespace TestHarness
         private void btnTest_Click(object sender, EventArgs e)
         {
             var oRobo = new WinAction();
-            var oMouse = new MouseAction();
             
-            IntPtr hWnd = oRobo.GetWindow("Test Form");
+            var oImg = new ImgAction();
+
+            string mainWindow = "Comet Desktop - [Pega Production (PRD) System] -PEGA 7- [Build  2018.10.30.1400 ]";
+
+
+            IntPtr hWnd = oRobo.GetWindow(mainWindow);
 
             oRobo.ActivateWindow(hWnd);
 
             Delay(500);
 
+            oImg.ImageFile = txtPath.Text.Trim();
+
+            System.Drawing.Point Location;
+
+            Location = oImg.GetImageLocation();
+
+            txtX.Text = Location.X.ToString();
+            txtY.Text = Location.Y.ToString();
+           
             //IntPtr hCntrl = oRobo.GetControlInWindow(hWnd, "WindowsForms10.BUTTON.app.0.28bc8c8_r9_ad11", "btnHello");
 
-           oRobo.GetControlInWindow("Test Form", "dataGridView1");
-            
+            // oRobo.GetControlInWindow(mainWindow, "CometListview");
+
 
         }
 
@@ -45,6 +59,28 @@ namespace TestHarness
             
         }
 
+        private void btnClick_Click(object sender, EventArgs e)
+        {
+            string mainWindow = "Comet Desktop - [Pega Production (PRD) System] -PEGA 7- [Build  2018.10.30.1400 ]";
 
+            var oComet = new CometAction(mainWindow);
+
+            oComet.PutOverride("02");
+
+            //var oMouse = new MouseAction();
+            //var oRobo = new WinAction();
+            //oMouse.SetCursorPosition(Convert.ToInt32(txtX.Text.Trim()), Convert.ToInt32(txtY.Text.Trim()));
+
+            //Delay(200);
+
+            //oMouse.MouseDblClick(Convert.ToInt32(txtX.Text.Trim()), Convert.ToInt32(txtY.Text.Trim()));
+            //Delay(100);
+
+            //SendKeys.Send("02");
+
+          //  MessageBox.Show(oRobo.GetValueOfList(Convert.ToInt32(txtIndex.Text.Trim())));
+
+
+        }
     }
 }
