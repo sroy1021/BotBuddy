@@ -374,11 +374,18 @@ namespace BotBuddy.SanjayProsadRoy
 
         }
 
-        public string GetValueOfList(int index)
+        public string GetValueOfList(string windowTitle, int index)
         {
-            AutomationElement element = GetControlFromCursorPos();
-            test(element);
-            return GetItemValueFromCurPosInListView(element, index);
+            var procId = GetWindowProcessId(windowTitle);
+            var parentWindow = AutomationElement.RootElement.FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.ProcessIdProperty, procId));
+            var childWindow = parentWindow.FindFirst(TreeScope.Descendants, new PropertyCondition(AutomationElement.AutomationIdProperty, "lvwComet"));
+
+            var row = childWindow.FindAll(TreeScope.Subtree, new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.DataItem));
+
+
+           // AutomationElement element = GetControlFromCursorPos();
+           // test(element);
+            return GetItemValueFromCurPosInListView(row[0], index);
 
             
         }
@@ -407,21 +414,29 @@ namespace BotBuddy.SanjayProsadRoy
             {
                 var valuePattern = (ValuePattern)patternObj;
                 tmpValue = valuePattern.Current.Value;
+
+                ((ValuePattern)valuePattern).SetValue("D5");
                 //var pattern = (SelectionPattern)patternObj;
                 //var arrayOfRows = pattern.Current.GetSelection();
+
             }
             else if (child.TryGetCurrentPattern(TextPattern.Pattern, out patternObj))
             {
                 var textPattern = (TextPattern)patternObj;
                 tmpValue = textPattern.DocumentRange.GetText(-1).TrimEnd('\r'); // often there is an extra '\r' hanging off the end.
                                                                                 //var pattern = (SelectionPattern)patternObj;
-                                                                                //var arrayOfRows = pattern.Current.GetSelection();
+                var valuePattern = (ValuePattern)patternObj;
+                ((ValuePattern)valuePattern).SetValue("D5");
+
+                //var arrayOfRows = pattern.Current.GetSelection();
             }
             else
             {
                 tmpValue = child.Current.Name;
 
             }
+
+
 
             return tmpValue;
 

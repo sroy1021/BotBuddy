@@ -61,11 +61,15 @@ namespace TestHarness
 
         private void btnClick_Click(object sender, EventArgs e)
         {
-            string mainWindow = "Comet Desktop - [Pega Production (PRD) System] -PEGA 7- [Build  2018.10.30.1400 ]";
+            var oWin = new WinAction();
 
-            var oComet = new CometAction(mainWindow);
+            oWin.GetValueOfList("Test Form", 3);
 
-            oComet.PutOverride("02");
+           // string mainWindow = "Comet Desktop - [Pega Production (PRD) System] -PEGA 7- [Build  2018.10.30.1400 ]";
+
+           // var oComet = new CometAction(mainWindow);
+
+          //  oComet.PutOverride("02");
 
             //var oMouse = new MouseAction();
             //var oRobo = new WinAction();
