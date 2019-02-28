@@ -94,7 +94,20 @@ namespace BotBuddy.SanjayProsadRoy
 
         }
 
+        public void MouseDblClick()
+        {
+            //X = X + 1;
+            //Y = Y + 1;
+            //int lparm = (Y << 16) + X;
+            //int lngResult = SendMessage(iHandle, WM_LBUTTONDOWN, 0, lparm);
+            //int lngResult2 = SendMessage(iHandle, WM_LBUTTONUP, 0, lparm);
+            //SetCursorPosition(X + 1, Y + 1);
+            mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, UIntPtr.Zero);
+            mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, UIntPtr.Zero);
+            mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, UIntPtr.Zero);
+            mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, UIntPtr.Zero);
 
+        }
 
 
 
