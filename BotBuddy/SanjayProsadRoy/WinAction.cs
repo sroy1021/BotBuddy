@@ -357,14 +357,11 @@ namespace BotBuddy.SanjayProsadRoy
                
                 
             }
-
-
-
-           
+                 
 
 
         }
-        private AutomationElement GetControlFromCursorPos()
+        public AutomationElement GetControlFromCursorPos()
         {
             POINT pt;
             GetCursorPos(out pt);
@@ -373,6 +370,31 @@ namespace BotBuddy.SanjayProsadRoy
             return el;
 
         }
+
+        public string GetValueFromGrid()
+        {
+            string result = "";
+            //var procId = GetWindowProcessId(windowTitle);
+            //var parentWindow = AutomationElement.RootElement.FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.ProcessIdProperty, procId));
+
+            var listElement = GetControlFromCursorPos();
+                       
+            
+            var rowList = listElement.FindAll(TreeScope.Subtree, new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.Edit));
+
+
+
+            for (int i = 0; i < 12; i++)
+            {
+
+                result = result + "," + GetItemValueFromCurPosInListView(rowList[0], i);
+            }
+
+
+            return result;
+
+        }
+
 
         public string GetValueOfList(string windowTitle, int index)
         {
@@ -383,14 +405,26 @@ namespace BotBuddy.SanjayProsadRoy
             var row = childWindow.FindAll(TreeScope.Subtree, new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.DataItem));
 
 
-           // AutomationElement element = GetControlFromCursorPos();
-           // test(element);
+            // AutomationElement element = GetControlFromCursorPos();
+            // test(element);
+
+           
             return GetItemValueFromCurPosInListView(row[0], index);
 
             
         }
 
-        private string GetItemValueFromCurPosInListView(AutomationElement element, int index)
+        public void ControlSetFocus(string windowTitle, string controlName)
+        {
+            var procId = GetWindowProcessId(windowTitle);
+            var parentWindow = AutomationElement.RootElement.FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.ProcessIdProperty, procId));
+
+            var controlWindow = parentWindow.FindFirst(TreeScope.Descendants, new PropertyCondition(AutomationElement.AutomationIdProperty, controlName));
+
+            controlWindow.SetFocus();
+        }
+
+        public string GetItemValueFromCurPosInListView(AutomationElement element, int index)
         {
             
             
