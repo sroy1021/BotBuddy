@@ -154,6 +154,9 @@ namespace BotBuddy.SanjayProsadRoy
                 int X = Convert.ToInt32(Location.X);
                 int Y = Convert.ToInt32(Location.Y);
 
+                if (X == 0 && Y == 0)
+                    return "Unsuccess : Image Not found";
+
 
                 oMouse.MouseClick(X + 10, Y + 20);
 
